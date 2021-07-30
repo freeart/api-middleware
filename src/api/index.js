@@ -4,7 +4,8 @@ const cors = require('cors');
 const jwt = require('express-jwt');
 
 const { login, clients, policies } = require('./routers');
-const { storage, assert } = require('../helpers');
+const assert = require('../helpers/assert');
+const storage = require('../helpers/storage');
 
 const app = express();
 app.use(cors());
