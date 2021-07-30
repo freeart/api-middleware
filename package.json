@@ -1,0 +1,35 @@
+{
+  "name": "axa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "SECRET=test node .",
+    "lint": "eslint",
+    "test:e2e": "SECRET=test mocha test/end2end.test.js --timeout 10000",
+    "test:unit": "SECRET=test mocha test/unit.test.js --timeout 10000",
+    "test:integration": "SECRET=test mocha test/integration.test.js --timeout 10000",
+    "test": "SECRET=test mocha --timeout 10000"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "eslint": "^7.31.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.23.4",
+    "mocha": "^9.0.3"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
+    "chai-http": "^4.3.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-jwt": "^6.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "jwt-decode": "^3.1.2",
+    "luxon": "^2.0.1"
+  }
+}
