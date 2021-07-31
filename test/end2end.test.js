@@ -321,6 +321,22 @@ describe('E2E test', () => {
 				});
 		});
 
+		it('get /policies?limit=20', (done) => {
+			request(process.env.ENTRY_POINT)
+				.get('/api/v1/policies?limit=AAA')
+				.set('authorization', cache.admin.token)
+				.send()
+				.end((err, res) => {
+					expect(err).to.be.null;
+					expect(res).to.have.status(400);
+					expect(res.body).to.be.deep.equal({
+						message: 'Invalid limit',
+						code: 400,
+					});
+					done();
+				});
+		});
+
 		it('get /policies/policy_id', (done) => {
 			const randomPolicy = cache.policies.find((policy) => policy.clientId !== cache.admin.id);
 			request(process.env.ENTRY_POINT)

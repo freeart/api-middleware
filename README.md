@@ -32,3 +32,8 @@ Maybe I don't understand something, but I put the "page" query param in API.
 
 - Clients with "user" roles have no policies.  
 Only admins have. I can't cover this part of e2e to test **/policies**, **/policies/:id** and **/clients/:id/policies** properly for client with role="user"
+
+- Http statues in swagger.  
+    - All API calls should describe 500 status for server error cases.  
+    - All API calls with path/query/body params should describe 400 status to return what wrong with the input data [?limit=AAA] for example.  
+    It helps to find issues on the frontend side.
