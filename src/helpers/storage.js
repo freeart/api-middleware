@@ -39,7 +39,7 @@ class Storage {
 
 		if (DateTime.now() >= Storage.cache[entity].expires) {
 			const result = await get(entity, { etag: Storage.cache[entity].etag, date: Storage.cache[entity].date });
-			if (Storage.cache[entity].etag !== result.etag){
+			if (result && Storage.cache[entity].etag !== result.etag){
 				const index = result.data.reduce((acc, cur) => {
 					acc[cur.id] = cur;
 					return acc;

@@ -37,3 +37,6 @@ Only admins have. I can't cover this part of e2e to test **/policies**, **/polic
     - All API calls should describe 500 status for server error cases.  
     - All API calls with path/query/body params should describe 400 status to return what wrong with the input data [?limit=AAA] for example.  
     It helps to find issues on the frontend side.
+
+- There is no description for the case when integration service failed?  
+ What behaviour should be? Have I remove local data to invalidate cache or return old data. 

@@ -39,16 +39,21 @@ module.exports = {
 			headers['If-Modified-Since'] = date;
 		}
 
-		const result = await axios({
-			method: 'get',
-			url: `${base}/api/${entity}`,
-			headers,
-		});
-		return {
-			expires: DateTime.fromRFC2822(result.headers.expires),
-			etag: result.headers.etag,
-			data: result.data,
-			date: result.headers.date,
-		};
+		try {
+			const result = await axios({
+				method: 'get',
+				url: `${base}/api/${entity}`,
+				headers,
+			});
+
+			return {
+				expires: DateTime.fromRFC2822(result.headers.expires),
+				etag: result.headers.etag,
+				data: result.data,
+				date: result.headers.date,
+			};
+		} catch (e) {
+			return null;
+		}
 	},
 };
