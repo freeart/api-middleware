@@ -6,10 +6,10 @@
   "scripts": {
     "start": "SECRET=test node .",
     "lint": "eslint",
-    "test:e2e": "SECRET=test mocha test/end2end.test.js --timeout 10000",
-    "test:unit": "SECRET=test mocha test/unit.test.js --timeout 10000",
-    "test:integration": "SECRET=test mocha test/integration.test.js --timeout 10000",
-    "test": "SECRET=test mocha --timeout 10000"
+    "test:e2e": "SECRET=test mocha test/end2end.test.js --timeout 30000",
+    "test:unit": "SECRET=test mocha test/unit.test.js --timeout 30000",
+    "test:integration": "SECRET=test mocha test/integration.test.js --timeout 30000",
+    "test": "SECRET=test mocha --timeout 30000"
   },
   "author": "",
   "license": "ISC",
