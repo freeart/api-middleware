@@ -202,7 +202,29 @@ describe('E2E test', () => {
 				});
 		});
 
-		it('get /clients?name=user_name', (done) => {
+		it('get /clients?limit=<clients.length - 1>&page=1', (done) => {
+			request(process.env.ENTRY_POINT)
+				.get(`/api/v1/clients?limit=${cache.users.length - 1}&page=1`)
+				.set('authorization', cache.admin.token)
+				.send()
+				.end((err, res) => {
+					expect(err).to.be.null;
+					expect(res).to.have.status(200);
+					expect(res.body).to.not.be.empty;
+					expect(res.body).to.be.an('array');
+					expect(res.body).to.have.lengthOf(1);
+					res.body.forEach((client) => {
+						expect(client).to.have.all.keys('id', 'name', 'email', 'role');
+						expect(client.id).to.be.a('string');
+						expect(client.name).to.be.a('string');
+						expect(client.email).to.be.a('string');
+						expect(client.role).to.be.a('string');
+					});
+					done();
+				});
+		});
+
+		it('get /clients?name=<user_name>', (done) => {
 			const randomUser = cache.users.find((client) => client.role === 'user');
 			request(process.env.ENTRY_POINT)
 				.get(`/api/v1/clients?name=${randomUser.name}`)
@@ -226,7 +248,7 @@ describe('E2E test', () => {
 				});
 		});
 
-		it('get /clients/user_id', (done) => {
+		it('get /clients/<user_id>', (done) => {
 			const randomUser = cache.users.find((client) => client.role === 'user');
 			request(process.env.ENTRY_POINT)
 				.get(`/api/v1/clients/${randomUser.id}`)
@@ -248,7 +270,7 @@ describe('E2E test', () => {
 				});
 		});
 
-		it('get /clients/user_id/policies', (done) => {
+		it('get /clients/<user_id>/policies', (done) => {
 			const randomPolicy = cache.policies[0];
 			request(process.env.ENTRY_POINT)
 				.get(`/api/v1/clients/${randomPolicy.clientId}/policies`)
@@ -321,7 +343,30 @@ describe('E2E test', () => {
 				});
 		});
 
-		it('get /policies?limit=20', (done) => {
+		it('get /policies?limit=<policies.length - 1>&page=1', (done) => {
+			request(process.env.ENTRY_POINT)
+				.get(`/api/v1/policies?limit=${cache.policies.length - 1}&page=1`)
+				.set('authorization', cache.admin.token)
+				.send()
+				.end((err, res) => {
+					expect(err).to.be.null;
+					expect(res).to.have.status(200);
+					expect(res.body).to.be.an('array');
+					expect(res.body).to.have.lengthOf(1);
+					res.body.forEach((policy) => {
+						expect(policy).to.have.all.keys('id', 'amountInsured', 'email', 'inceptionDate', 'installmentPayment', 'clientId');
+						expect(policy.id).to.be.a('string');
+						expect(policy.amountInsured).to.be.a('string');
+						expect(policy.email).to.be.a('string');
+						expect(policy.inceptionDate).to.be.a('string');
+						expect(policy.installmentPayment).to.be.a('boolean');
+						expect(policy.clientId).to.be.a('string');
+					});
+					done();
+				});
+		});
+
+		it('get /policies?limit=AAA', (done) => {
 			request(process.env.ENTRY_POINT)
 				.get('/api/v1/policies?limit=AAA')
 				.set('authorization', cache.admin.token)
@@ -337,7 +382,7 @@ describe('E2E test', () => {
 				});
 		});
 
-		it('get /policies/policy_id', (done) => {
+		it('get /policies/<policy_id>', (done) => {
 			const randomPolicy = cache.policies.find((policy) => policy.clientId !== cache.admin.id);
 			request(process.env.ENTRY_POINT)
 				.get(`/api/v1/policies/${randomPolicy.id}`)
@@ -424,7 +469,7 @@ describe('E2E test', () => {
 				});
 		});
 
-		it('get /clients filtered by name', (done) => {
+		it('get /clients (filtered by name)', (done) => {
 			request(process.env.ENTRY_POINT)
 				.get('/api/v1/clients?name=test')
 				.set('authorization', cache.user.token)
@@ -454,7 +499,7 @@ describe('E2E test', () => {
 				});
 		});
 
-		it('get /clients/self_id', (done) => {
+		it('get /clients/<self_id>', (done) => {
 			request(process.env.ENTRY_POINT)
 				.get(`/api/v1/clients/${cache.user.id}`)
 				.set('authorization', cache.user.token)
@@ -475,7 +520,7 @@ describe('E2E test', () => {
 				});
 		});
 
-		it('get /clients/self_id/policies', (done) => {
+		it('get /clients/<self_id>/policies', (done) => {
 			request(process.env.ENTRY_POINT)
 				.get(`/api/v1/clients/${cache.user.id}/policies`)
 				.set('authorization', cache.user.token)
@@ -521,30 +566,7 @@ describe('E2E test', () => {
 				});
 		});
 
-		it('get /policies', (done) => {
-			request(process.env.ENTRY_POINT)
-				.get('/api/v1/policies')
-				.set('authorization', cache.user.token)
-				.send()
-				.end((err, res) => {
-					expect(err).to.be.null;
-					expect(res).to.have.status(200);
-					expect(res.body).to.be.an('array');
-					expect(res.body).to.have.lengthOf(cache.user.policies.length);
-					res.body.forEach((policy) => {
-						expect(policy).to.have.all.keys('id', 'amountInsured', 'email', 'inceptionDate', 'installmentPayment', 'clientId');
-						expect(policy.id).to.be.a('string');
-						expect(policy.amountInsured).to.be.a('string');
-						expect(policy.email).to.be.a('string');
-						expect(policy.inceptionDate).to.be.a('string');
-						expect(policy.installmentPayment).to.be.a('boolean');
-						expect(policy.clientId).to.be.a('string');
-					});
-					done();
-				});
-		});
-
-		it('get /policies/:id', (done) => {
+		it('get /policies/<policy_id>', (done) => {
 			const randomPolicy = cache.policies.find((policy) => policy.clientId !== cache.user.id);
 			request(process.env.ENTRY_POINT)
 				.get(`/api/v1/policies/${randomPolicy.id}`)
