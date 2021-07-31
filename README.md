@@ -14,6 +14,8 @@ npm run test:e2e
 ```sh
 npm start
 ```
+username: any email from clients list   
+password: s3cr3t   
 
 # issues
 - The Swagger file uses the wrong syntax of the path param declaration.  
