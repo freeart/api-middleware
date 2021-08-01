@@ -53,6 +53,45 @@ describe('E2E test', () => {
 	});
 
 	describe('no token scope', () => {
+		it('try to get token w/o username and password', (done) => {
+			request(process.env.ENTRY_POINT)
+				.post('/api/v1/login')
+				.send()
+				.end((err, res) => {
+					expect(err).to.be.null;
+					expect(res).to.have.status(400);
+					done();
+				});
+		});
+
+		it('try to get token with wrong username', (done) => {
+			request(process.env.ENTRY_POINT)
+				.post('/api/v1/login')
+				.send({
+					username: 'test',
+					password: 's3cr3t',
+				})
+				.end((err, res) => {
+					expect(err).to.be.null;
+					expect(res).to.have.status(401);
+					done();
+				});
+		});
+
+		it('try to get token with wrong password', (done) => {
+			request(process.env.ENTRY_POINT)
+				.post('/api/v1/login')
+				.send({
+					username: cache.users[0].email,
+					password: 'test',
+				})
+				.end((err, res) => {
+					expect(err).to.be.null;
+					expect(res).to.have.status(401);
+					done();
+				});
+		});
+
 		it('get /clients', (done) => {
 			request(process.env.ENTRY_POINT)
 				.get('/api/v1/clients')
