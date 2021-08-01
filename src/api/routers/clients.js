@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
 	page = parseInt(page, 10);
 	req.assert(limit, { type: 'number', message: 'Invalid limit', code: 400 });
 	req.assert(page, { type: 'number', message: 'Invalid page', code: 400 });
-	req.assert(name, { type: 'string?', code: 500 });
+	req.assert(name, { type: 'string?', message: 'Invalid name filter', code: 400 });
 
 	let filter = req.user.role === 'admin' && name ? { filter: (item) => item.name === name } : {};
 	if (req.user.role !== 'admin') {
@@ -30,7 +30,7 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res, next) => {
 	const { id = null } = req.params;
-	req.assert(id, { type: 'string', code: 400 });
+	req.assert(id, { type: 'string', message: 'Invalid client id', code: 400 });
 	if (req.user.role !== 'admin') {
 		req.assert(id === req.user.id, { type: 'boolean', message: 'Access Denied', code: 403 });
 	}
@@ -46,7 +46,7 @@ router.get('/:id', (req, res, next) => {
 
 router.get('/:id/policies', (req, res, next) => {
 	const { id: clientId = null } = req.params;
-	req.assert(clientId, { type: 'string', code: 400 });
+	req.assert(clientId, { type: 'string', message: 'Invalid client id', code: 400 });
 
 	let filter = req.user.role === 'admin' ? { filter: (item) => item.clientId === clientId } : {};
 	if (req.user.role !== 'admin') {

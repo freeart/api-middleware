@@ -22,7 +22,7 @@ router.get('/', (req, res, next) => {
 
 router.get('/:id', (req, res, next) => {
 	const { id = null } = req.params;
-	req.assert(id, { type: 'string', code: 400 });
+	req.assert(id, { type: 'string', message: 'Invalid policy id', code: 400 });
 
 	const params = { id };
 	if (req.user.role !== 'admin') {

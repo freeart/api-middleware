@@ -248,6 +248,22 @@ describe('E2E test', () => {
 				});
 		});
 
+		it('get /clients?name=<invalid>', (done) => {
+			request(process.env.ENTRY_POINT)
+				.get('/api/v1/clients?name=%20')
+				.set('authorization', cache.admin.token)
+				.send()
+				.end((err, res) => {
+					expect(err).to.be.null;
+					expect(res).to.have.status(400);
+					expect(res.body).to.be.deep.equal({
+						message: 'Invalid name filter',
+						code: 400,
+					});
+					done();
+				});
+		});
+
 		it('get /clients/<user_id>', (done) => {
 			const randomUser = cache.users.find((client) => client.role === 'user');
 			request(process.env.ENTRY_POINT)
@@ -266,6 +282,22 @@ describe('E2E test', () => {
 					expect(client.email).to.be.a('string');
 					expect(client.role).to.be.a('string');
 					expect(client.id).equal(randomUser.id);
+					done();
+				});
+		});
+
+		it('get /clients/<invalid>', (done) => {
+			request(process.env.ENTRY_POINT)
+				.get('/api/v1/clients/%20')
+				.set('authorization', cache.admin.token)
+				.send()
+				.end((err, res) => {
+					expect(err).to.be.null;
+					expect(res).to.have.status(400);
+					expect(res.body).to.be.deep.equal({
+						message: 'Invalid client id',
+						code: 400,
+					});
 					done();
 				});
 		});
@@ -292,6 +324,22 @@ describe('E2E test', () => {
 						expect(policy.inceptionDate).to.be.a('string');
 						expect(policy.installmentPayment).to.be.a('boolean');
 						expect(policy.clientId).to.be.a('string');
+					});
+					done();
+				});
+		});
+
+		it('get /clients/<invalid>/policies', (done) => {
+			request(process.env.ENTRY_POINT)
+				.get('/api/v1/clients/%20/policies')
+				.set('authorization', cache.admin.token)
+				.send()
+				.end((err, res) => {
+					expect(err).to.be.null;
+					expect(res).to.have.status(400);
+					expect(res.body).to.be.deep.equal({
+						message: 'Invalid client id',
+						code: 400,
 					});
 					done();
 				});
@@ -469,7 +517,7 @@ describe('E2E test', () => {
 				});
 		});
 
-		it('get /clients (filtered by name)', (done) => {
+		it('get /clients?name=test', (done) => {
 			request(process.env.ENTRY_POINT)
 				.get('/api/v1/clients?name=test')
 				.set('authorization', cache.user.token)

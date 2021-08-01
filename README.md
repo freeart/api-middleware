@@ -41,4 +41,10 @@ Only admins have. I can't cover this part of e2e to test **/policies**, **/polic
     It helps to find issues on the frontend side.
 
 - There is no description for the case when integration service failed?  
- What behaviour should be? Have I remove local data to invalidate cache or return old data. 
+ What behaviour should be? Have I remove local data to invalidate cache or return old data.
+
+ # features
+Storage#addTask each HTTP request works through the queue to resolve the concurrent updating issue.  
+The first user calls endpoint - the server executes updating data from the integrator.  
+The second user calls the same endpoint at the same time - the server puts the task in the queue to respond when new data will come.  
+Data has arrived - the server responds to the first and the second user in order. 
